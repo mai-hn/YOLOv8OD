@@ -47,6 +47,7 @@ def identify():
     parser.add_argument('--focalLength', type=float, default=50, help='focal length of the camera')
     parser.add_argument('--api_ip', type=str, default='192.168.32.14', help='url of the api')
     parser.add_argument('--api_port', type=str, default='30002', help='url of the api')
+
     
     opt = parser.parse_args()
     
@@ -61,14 +62,14 @@ def identify():
     #correction_camera.undistort_video(opt.video_path, './videos/test_undistort.mp4', camera_matrix, dist_coeffs)
     
     # 检测目标
-    yolo.yolov8(video_stream, opt.model, camera_matrix, dist_coeffs)
+    yolo.yolov8(video_stream, opt.model, camera_matrix, dist_coeffs, opt.knownWidth, opt.focalLength)
     # def convert_avi_to_mp4(input_file, output_file):
     #     ffmpeg_cmd = ['ffmpeg', '-i', input_file,'-vcodec', 'h264' , output_file]
     #     subprocess.run(ffmpeg_cmd)
     #convert_avi_to_mp4('../vue/src/assets/video/test.avi', '../vue/src/assets/video/result.mp4')
     #convert_avi_to_mp4('../vue/src/assets/video/test.mp4', '../vue/src/assets/video/org.mp4')
     # 计算距离
-    distance.distance_to_camera(opt.knownWidth, opt.focalLength, './runs/detect/predict/labels', './videos/test_undistort.mp4')
+    # distance.distance_to_camera(opt.knownWidth, opt.focalLength, './runs/detect/predict/labels', opt.width, opt.height)
     # 辅助目标研判
     #api.get_api(opt.api_ip, opt.api_port, './runs/detect/predict/crops')
 

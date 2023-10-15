@@ -1,6 +1,9 @@
 import cv2
 from ultralytics import YOLO
 
+knownWidth = 100
+focalLength = 1000
+
 # Load the YOLOv8 model
 model = YOLO('yolov8n.pt')
 
@@ -19,6 +22,12 @@ while cap.isOpened():
 
         # Visualize the results on the frame
         annotated_frame = results[0].plot()
+        for box in results[0].boxes.xywh:
+                box = box.to('cpu').numpy()
+                # 计算距离
+                distance = (knownWidth * focalLength) / box[2]
+                # 绘制距离
+                cv2.putText(annotated_frame, f'{distance:.2f}m', (int(box[0]), int(box[1]) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
 
         # Display the annotated frame
         cv2.imshow("YOLOv8 Tracking", annotated_frame)
